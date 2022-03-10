@@ -1,6 +1,7 @@
 import instaloader
 import getpass
 from colorama import Fore, init
+from datetime import datetime
 
 
 loader = instaloader.Instaloader()
@@ -9,14 +10,14 @@ init(autoreset=True)
 
 print(Fore.BLUE + "-- Welcome to FollowEye -- (Check who is not following you back on Instagram)")
 
-username = input("Username: ")
-password = getpass.getpass(prompt='Password: ')
+user = input("Username: ")
+passwd = getpass.getpass(prompt='Password: ')
 
 # log into user account
-loader.login(username, password)
+loader.login(user, passwd)
 
 # get user profile
-profile = instaloader.Profile.from_username(loader.context, username)
+profile = instaloader.Profile.from_username(loader.context, user)
 
 # followers list
 followerList = []
@@ -30,12 +31,13 @@ secondCount = 0
 noFollowBackList = []
 thirdCount = 0;
 
+print(Fore.GREEN + "Logged In Successfully!")
 print("Getting list of people you follow...")
 
 # get following
 for followee in profile.get_followees():
     followingList.append(followee.username)
-    file = open(username + "_following.txt","a+")
+    file = open(user + "_following" + datetime.today().strftime('%Y-%m-%d') + ".txt","a+")
     file.write(followingList[count])
     file.write("\n")
     file.close()
@@ -47,7 +49,7 @@ print("Getting list of people following you...")
 # get followers
 for follower in profile.get_followers():
     followerList.append(follower.username)
-    file = open(username + "_followers.txt","a+")
+    file = open(user + "_followers" + datetime.today().strftime('%Y-%m-%d') + ".txt","a+")
     file.write(followerList[secondCount])
     file.write("\n")
     file.close()
@@ -62,7 +64,7 @@ print("Checking who is not following you back")
 for followee in followingList:
     if followee not in followerList:
         noFollowBackList.append(followee)
-        file = open(username + "_noFollowBack.txt","a+")
+        file = open(user + "_noFollowBack" + datetime.today().strftime('%Y-%m-%d') + ".txt","a+")
         file.write(followerList[thirdCount])
         file.write("\n")
         file.close()
